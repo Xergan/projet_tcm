@@ -1,12 +1,20 @@
-class LoginState {
-  final bool loggedIn;
-  final bool isLoading;
-  final String? errorMessage;
+part of 'login_bloc.dart';
 
-  LoginState({required this.loggedIn, this.isLoading = false, this.errorMessage});
+@immutable
+sealed class LoginState {}
 
-  factory LoginState.loading() => LoginState(loggedIn: false, isLoading: true);
-  factory LoginState.success() => LoginState(loggedIn: true);
-  factory LoginState.failure(String errorMessage) =>
-      LoginState(loggedIn: false, errorMessage: errorMessage);
+/// État initial (avant toute tentative de connexion)
+final class LoginInitial extends LoginState {}
+
+/// État de chargement (connexion en cours)
+final class LoginLoading extends LoginState {}
+
+/// État de succès (connexion réussie)
+final class LoginSuccess extends LoginState {}
+
+/// État d'échec (connexion échouée)
+final class LoginFailure extends LoginState {
+  final String errorMessage;
+
+  LoginFailure(this.errorMessage);
 }
