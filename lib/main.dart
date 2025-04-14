@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:projet_tcm/bloc/login/login_bloc.dart';
 import 'package:projet_tcm/pages/login_page.dart';
+import 'package:projet_tcm/services/auth_service.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load();
   runApp(const MainApp());
 }
 
@@ -12,11 +16,14 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final authService = AuthService();
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: MultiBlocProvider(
         providers: [
-          BlocProvider(create: (context) => LoginBloc())
+          BlocProvider(create: (context) => LoginBloc(authService))
         ],
         child: const LoginPage(),
       ),

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:projet_tcm/bloc/login/login_bloc.dart';
 import 'package:projet_tcm/bloc/login/login_event.dart';
 import 'package:projet_tcm/bloc/login/login_state.dart';
+import 'package:projet_tcm/pages/menu_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -10,12 +13,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final loginState = LoginState(false);
-
   final _usernameController = TextEditingController();
-
   final _passwordController = TextEditingController();
-
   bool _isSigning = false;
 
   @override
@@ -27,20 +26,20 @@ class _LoginPageState extends State<LoginPage> {
             children: [
               const SizedBox(height: 50),
 
-              // logo
+              // Logo
               const Icon(Icons.account_circle_sharp, size: 100),
 
               const SizedBox(height: 25),
 
-              // welcome back
-              Text(
+              // Welcome back message
+              const Text(
                 "Ravi de vous revoir ! Vous nous avez manqué.",
                 style: TextStyle(fontSize: 16),
               ),
 
               const SizedBox(height: 25),
 
-              // username
+              // Username field
               MyTextField(
                 controller: _usernameController,
                 hintText: "Nom d'utilisateur",
@@ -49,7 +48,7 @@ class _LoginPageState extends State<LoginPage> {
 
               const SizedBox(height: 25),
 
-              // password
+              // Password field
               MyTextField(
                 controller: _passwordController,
                 hintText: "Mot de passe",
@@ -58,36 +57,18 @@ class _LoginPageState extends State<LoginPage> {
 
               const SizedBox(height: 25),
 
-              // login button
+              // Login button
               GestureDetector(
-                onTap: () async {
-                  setState(() {
-                    _isSigning = true;
-                  });
+                onTap: () {
+                  final username = _usernameController.text;
+                  final password = _passwordController.text;
 
-                  LoginButtonPressed();
-
-                  if (loginState.loggedIn == true) {
-                    SnackBar(
-                      content: Center(
-                        child: Text(
-                          "Connecté",
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                      backgroundColor: Colors.red,
-                    );
-                  }
-
-                  setState(() {
-                    _isSigning = false;
-                  });
+                  context.read<LoginBloc>().add(
+                    LoginButtonPressed(username, password),
+                  );
                 },
                 child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 200),
+                  duration: const Duration(milliseconds: 300),
                   padding: const EdgeInsets.all(25.0),
                   margin: const EdgeInsets.symmetric(horizontal: 25.0),
                   decoration: BoxDecoration(
@@ -105,6 +86,31 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
+              ),
+
+              const SizedBox(height: 25),
+
+              BlocListener<LoginBloc, LoginState>(
+                listener: (context, state) {
+                  if (state.isLoading) {
+                    setState(() {
+                      _isSigning = true;
+                    });
+                  } else {
+                    setState(() {
+                      _isSigning = false;
+                    });
+
+                    if (state.loggedIn) {
+                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MenuPage()));
+                    } else if (state.errorMessage != null) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text(state.errorMessage!)),
+                      );
+                    }
+                  }
+                },
+                child: const SizedBox.shrink(), // Pas besoin de BlocBuilder ici
               ),
             ],
           ),
