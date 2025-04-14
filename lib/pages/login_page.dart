@@ -113,7 +113,7 @@ class _LoginPageState extends State<LoginPage> {
                     }
                   }
                 },
-                child: const SizedBox.shrink(),
+                child: Container(),
               ),
             ],
           ),

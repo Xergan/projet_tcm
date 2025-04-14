@@ -7,17 +7,25 @@ class SensorService {
 
   /// Récupère la liste de tous les capteurs
   Future<List> getSensors() async {
-    final url = Uri.parse('$baseUrl/capteurs/');
-    final response = await http.get(
-      url,
-      headers: {'Content-Type': 'application/json', 'x-api-key': dotenv.env['API_KEY']!},
-    );
+    try {
+      final apiKey = dotenv.env['API_KEY'];
+      if (apiKey == null) {
+        throw Exception('API_KEY is not defined in the .env file');
+      }
 
-    if (response.statusCode == 200) {
-      return jsonDecode(response.body);
-    } else {
-      throw Exception('Erreur lors de la récupération des capteurs : ${response.statusCode}');
+      final url = Uri.parse('$baseUrl/capteurs/');
+      final response = await http.get(
+        url,
+        headers: {'Content-Type': 'application/json', 'x-api-key': apiKey},
+      );
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Erreur lors de la récupération des capteurs : ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Erreur réseau : $e');
     }
   }
-
 }
