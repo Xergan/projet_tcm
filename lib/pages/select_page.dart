@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:projet_tcm/bloc/sensor/sensor_bloc.dart';
+import 'package:projet_tcm/blocs/sensor/sensor_cubit.dart';
 
 class SelectPage extends StatefulWidget {
   const SelectPage({super.key});
@@ -13,7 +13,7 @@ class _SelectPageState extends State<SelectPage> {
   @override
   void initState() {
     super.initState();
-    context.read<SensorBloc>().add(FetchSensors());
+    context.read<SensorCubit>().fetchSensors();
   }
 
 
@@ -21,7 +21,7 @@ class _SelectPageState extends State<SelectPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Sélectionnez un capteur')),
-      body: BlocBuilder<SensorBloc, SensorState>(
+      body: BlocBuilder<SensorCubit, SensorState>(
         builder: (context, state) {
           if (state is SensorLoading) {
             return const Center(child: CircularProgressIndicator());

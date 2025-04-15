@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:projet_tcm/bloc/login/login_bloc.dart';
+import 'package:projet_tcm/blocs/login/login_bloc.dart';
 import 'package:projet_tcm/pages/select_page.dart';
 
 class LoginPage extends StatefulWidget {

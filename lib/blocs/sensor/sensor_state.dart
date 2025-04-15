@@ -1,4 +1,4 @@
-part of 'sensor_bloc.dart';
+part of 'sensor_cubit.dart';
 
 @immutable
 sealed class SensorState {}

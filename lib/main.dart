@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:projet_tcm/bloc/login/login_bloc.dart';
-import 'package:projet_tcm/bloc/sensor/sensor_bloc.dart';
+import 'package:projet_tcm/blocs/login/login_bloc.dart';
+import 'package:projet_tcm/blocs/sensor/selected_sensor_cubit.dart';
+import 'package:projet_tcm/blocs/sensor/sensor_cubit.dart';
 import 'package:projet_tcm/pages/login_page.dart';
 import 'package:projet_tcm/pages/select_page.dart';
 import 'package:projet_tcm/services/auth_service.dart';
@@ -25,7 +26,8 @@ class MainApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => LoginBloc(authService)),
-        BlocProvider(create: (context) => SensorBloc(sensorService)), // Fournit SensorBloc globalement
+        BlocProvider(create: (context) => SensorCubit(sensorService)),
+        BlocProvider(create: (context) => SelectedSensorCubit()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
