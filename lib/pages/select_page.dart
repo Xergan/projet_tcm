@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:projet_tcm/blocs/sensor/selected_sensor_cubit.dart';
 import 'package:projet_tcm/blocs/sensor/sensor_cubit.dart';
 
 class SelectPage extends StatefulWidget {
@@ -34,7 +35,8 @@ class _SelectPageState extends State<SelectPage> {
                 return SensorTemplate(
                   sensorId: sensor["Id_capteur"],
                   onTap: () {
-                    print('Capteur sélectionné : ${sensor["Id_capteur"]}');
+                    BlocProvider.of<SelectedSensorCubit>(context, listen: false).selectSensor(sensor);
+                    Navigator.pushNamed(context, '/main');
                   },
                 );
               },
@@ -68,7 +70,7 @@ class SensorTemplate extends StatelessWidget {
         margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
         padding: const EdgeInsets.all(16.0),
         decoration: BoxDecoration(
-          color: Colors.grey.shade200,
+          color: Colors.grey.shade800,
           borderRadius: BorderRadius.circular(8.0),
         ),
         child: Row(

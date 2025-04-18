@@ -4,6 +4,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:projet_tcm/blocs/login/login_bloc.dart';
 import 'package:projet_tcm/blocs/sensor/selected_sensor_cubit.dart';
 import 'package:projet_tcm/blocs/sensor/sensor_cubit.dart';
+import 'package:projet_tcm/blocs/sensor/sensor_data_cubit.dart';
+import 'package:projet_tcm/pages/main_page.dart';
 import 'package:projet_tcm/pages/login_page.dart';
 import 'package:projet_tcm/pages/select_page.dart';
 import 'package:projet_tcm/services/auth_service.dart';
@@ -28,6 +30,7 @@ class MainApp extends StatelessWidget {
         BlocProvider(create: (context) => LoginBloc(authService)),
         BlocProvider(create: (context) => SensorCubit(sensorService)),
         BlocProvider(create: (context) => SelectedSensorCubit()),
+        BlocProvider(create: (context) => SensorDataCubit(sensorService)),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -35,7 +38,26 @@ class MainApp extends StatelessWidget {
         routes: {
           '/login': (context) => const LoginPage(),
           '/select': (context) => const SelectPage(),
+          '/main': (context) => const MainPage(), 
         },
+         theme: ThemeData(
+        colorScheme: ColorScheme.fromSwatch(
+          primarySwatch: Colors.cyan,
+          cardColor: Colors.grey.shade900,
+          accentColor: Colors.cyanAccent,
+          errorColor: Colors.red,
+          brightness: Brightness.dark,
+        ),
+        textTheme: TextTheme(
+          bodyLarge: TextStyle(color: Colors.grey.shade200),
+          bodyMedium: TextStyle(color: Colors.grey.shade200),
+          bodySmall: TextStyle(color: Colors.grey.shade200),
+        ),
+        appBarTheme: AppBarTheme(
+          titleTextStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.grey.shade200),
+        ),
+        useMaterial3: true,
+      ),
       ),
     );
   }

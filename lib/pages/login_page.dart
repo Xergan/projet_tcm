@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:projet_tcm/blocs/login/login_bloc.dart';
-import 'package:projet_tcm/pages/select_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -90,6 +89,8 @@ class _LoginPageState extends State<LoginPage> {
 
               BlocListener<LoginBloc, LoginState>(
                 listener: (context, state) {
+                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+
                   if (state is LoginLoading) {
                     setState(() {
                       _isSigning = true;
@@ -100,15 +101,20 @@ class _LoginPageState extends State<LoginPage> {
                     });
 
                     if (state is LoginSuccess) {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const SelectPage(),
-                        ),
-                      );
+                      Navigator.pushReplacementNamed(context, '/select');
                     } else if (state is LoginFailure) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(state.errorMessage)),
+                        SnackBar(
+                          content: Text(
+                            state.errorMessage,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
+                          backgroundColor: Theme.of(context).colorScheme.error,
+                        ),
                       );
                     }
                   }
