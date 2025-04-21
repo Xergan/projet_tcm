@@ -22,21 +22,25 @@ class SensorService {
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
       } else {
-        throw Exception('Erreur lors de la récupération des capteurs : ${response.statusCode}');
+        throw Exception(
+          'Erreur lors de la récupération des capteurs : ${response.statusCode}',
+        );
       }
     } catch (e) {
       throw Exception('Erreur réseau : $e');
     }
   }
 
-  Future getDatas(String idCapteur, DateTime dateTime) async {
-        try {
+  Future getFillingData(String idCapteur, DateTime dateTime) async {
+    try {
       final apiKey = dotenv.env['API_KEY'];
       if (apiKey == null) {
         throw Exception('API_KEY is not defined in the .env file');
       }
 
-      final url = Uri.parse('$baseUrl/capteurs/remplissage?id_capteur=$idCapteur&date=$dateTime');
+      final url = Uri.parse(
+        '$baseUrl/capteurs/remplissage?id_capteur=$idCapteur&date=$dateTime',
+      );
       final response = await http.get(
         url,
         headers: {'Content-Type': 'application/json', 'x-api-key': apiKey},
@@ -45,7 +49,36 @@ class SensorService {
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
       } else {
-        throw Exception('Erreur lors de la récupération des données : ${response.statusCode}');
+        throw Exception(
+          'Erreur lors de la récupération des données : ${response.statusCode}',
+        );
+      }
+    } catch (e) {
+      throw Exception('Erreur réseau : $e');
+    }
+  }
+
+  Future getAlerts(String idCapteur) async {
+    try {
+      final apiKey = dotenv.env['API_KEY'];
+      if (apiKey == null) {
+        throw Exception('API_KEY is not defined in the .env file');
+      }
+
+      final url = Uri.parse(
+        '$baseUrl/capteurs/alertes?id_capteur=$idCapteur',
+      );
+      final response = await http.get(
+        url,
+        headers: {'Content-Type': 'application/json', 'x-api-key': apiKey},
+      );
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception(
+          'Erreur lors de la récupération des données : ${response.statusCode}',
+        );
       }
     } catch (e) {
       throw Exception('Erreur réseau : $e');

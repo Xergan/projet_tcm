@@ -16,6 +16,9 @@ final class SensorLoaded extends SensorState {
   SensorLoaded(this.sensors);
 }
 
+/// État si la liste est vide
+final class SensorEmpty extends SensorState {}
+
 /// État d'échec avec un message d'erreur
 final class SensorError extends SensorState {
   final String errorMessage;

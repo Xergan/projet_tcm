@@ -3,8 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:projet_tcm/blocs/login/login_bloc.dart';
 import 'package:projet_tcm/blocs/sensor/selected_sensor_cubit.dart';
+import 'package:projet_tcm/blocs/sensor/sensor_alerts_cubit.dart';
 import 'package:projet_tcm/blocs/sensor/sensor_cubit.dart';
-import 'package:projet_tcm/blocs/sensor/sensor_data_cubit.dart';
+import 'package:projet_tcm/blocs/sensor/sensor_filling_cubit.dart';
 import 'package:projet_tcm/pages/main_page.dart';
 import 'package:projet_tcm/pages/login_page.dart';
 import 'package:projet_tcm/pages/select_page.dart';
@@ -30,7 +31,8 @@ class MainApp extends StatelessWidget {
         BlocProvider(create: (context) => LoginBloc(authService)),
         BlocProvider(create: (context) => SensorCubit(sensorService)),
         BlocProvider(create: (context) => SelectedSensorCubit()),
-        BlocProvider(create: (context) => SensorDataCubit(sensorService)),
+        BlocProvider(create: (context) => SensorFillingCubit(sensorService)),
+        BlocProvider(create: (context) => SensorAlertsCubit(sensorService)),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

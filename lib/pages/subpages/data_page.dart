@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:projet_tcm/widgets/my_graph.dart';
+import 'package:intl/intl.dart';
 
 class DataPage extends StatefulWidget {
   final Map<String, dynamic> selectedSensor;
@@ -39,35 +40,31 @@ class _DataPageState extends State<DataPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                SizedBox(
-                  height: 280.0,
-                  width: 380.0,
-                  child: Card(
-                    color: Colors.grey.shade800,
-                    elevation: 5.0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16.0),
-                    ),
-                    child: AspectRatio(
-                      aspectRatio: 1.70,
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                          right: 18,
-                          left: 12,
-                          top: 24,
-                          bottom: 12,
-                        ),
-                        child: MyGraph(
-                          idCapteur: widget.selectedSensor['Id_capteur'],
-                          dateTime: selectedDate,
-                        ),
+                Card(
+                  elevation: 5.0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16.0),
+                  ),
+                  child: AspectRatio(
+                    aspectRatio: 1.70,
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        right: 18,
+                        left: 12,
+                        top: 24,
+                        bottom: 12,
+                      ),
+                      child: MyGraph(
+                        idCapteur: widget.selectedSensor['Id_capteur'],
+                        dateTime: selectedDate,
                       ),
                     ),
                   ),
                 ),
+
                 const SizedBox(height: 20),
                 Text(
-                  "Remplissage du : ${selectedDate.day.toString().padLeft(2, '0')}/${selectedDate.month.toString().padLeft(2, '0')}/${selectedDate.year}",
+                  "Remplissage du : ${DateFormat('dd-MM-yyyy').format(selectedDate)}",
                   style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,

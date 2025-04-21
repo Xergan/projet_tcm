@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:projet_tcm/blocs/sensor/sensor_data_cubit.dart';
+import 'package:projet_tcm/blocs/sensor/sensor_filling_cubit.dart';
 
 class MyGraph extends StatelessWidget {
   final String idCapteur;
@@ -11,17 +11,17 @@ class MyGraph extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.read<SensorDataCubit>().fetchDatas(idCapteur, dateTime);
+    context.read<SensorFillingCubit>().fetchFillingData(idCapteur, dateTime);
 
-    return BlocBuilder<SensorDataCubit, SensorDataState>(
+    return BlocBuilder<SensorFillingCubit, SensorFillingState>(
       builder: (context, state) {
-        if (state is SensorDataLoading) {
+        if (state is SensorFillingLoading) {
           return const Center(child: CircularProgressIndicator());
-        } else if (state is SensorDataError) {
+        } else if (state is SensorFillingError) {
           return Center(child: Text('Erreur : ${state.errorMessage}'));
-        } else if (state is SensorDataLoaded) {
-          final lineData =
-              state.datas.map((item) {
+        } else if (state is SensorFillingLoaded) {
+          final spots =
+              state.fillings.map((item) {
                   final date = DateTime.parse(item['Datetime']);
                   final index = (date.hour * 2) + (date.minute >= 30 ? 1 : 0);
                   final remplissage = item['Remplissage']?.toDouble() ?? 0.0;
@@ -29,26 +29,27 @@ class MyGraph extends StatelessWidget {
                 }).toList()
                 ..sort((a, b) => a.x.compareTo(b.x));
 
-          if (lineData.isEmpty) {
+          if (spots.isEmpty) {
             return const Center(
               child: Text(
                 'Pas de données disponibles.',
-                style: TextStyle(fontSize: 20),
+                style: TextStyle(fontSize: 14),
               ),
             );
           }
 
-          final existingIndices = lineData.map((e) => e.x.toInt()).toSet();
+          final existingIndices = spots.map((e) => e.x.toInt()).toSet();
 
           return LineChart(
             LineChartData(
               minY: 0,
               maxY: 100,
               minX: 0,
-              maxX: lineData.length > 1 ? lineData.length - 1 : 1,
+              maxX: spots.length > 1 ? spots.length - 1 : 1,
+              clipData: FlClipData.all() ,
               lineBarsData: [
                 LineChartBarData(
-                  spots: lineData,
+                  spots: spots,
                   isCurved: true,
                   color: Colors.cyan,
                   barWidth: 2,
@@ -101,7 +102,7 @@ class MyGraph extends StatelessWidget {
             ),
           );
         } else {
-          return const Center(child: Text('État inconnu.'));
+          return const Center();
         }
       },
     );
