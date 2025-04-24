@@ -10,11 +10,29 @@ import 'package:projet_tcm/pages/main_page.dart';
 import 'package:projet_tcm/pages/login_page.dart';
 import 'package:projet_tcm/pages/select_page.dart';
 import 'package:projet_tcm/services/auth_service.dart';
+import 'package:projet_tcm/services/mqtt_service.dart';
+import 'package:projet_tcm/services/notif_service.dart';
 import 'package:projet_tcm/services/sensor_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  NotifService().initNotification();
+
+  final mqttService = MqttService();
+
+  // Initialisation et connexion MQTT
+  await mqttService.initialize();
+  bool connected = await mqttService.connect(
+    username: "xergan",
+    password: "1234",
+  );
+  if (connected) {
+    mqttService.subscribe('test/topic');
+    mqttService.listenToUpdates();
+  }
+
   await dotenv.load();
+
   runApp(const MainApp());
 }
 
@@ -40,26 +58,30 @@ class MainApp extends StatelessWidget {
         routes: {
           '/login': (context) => const LoginPage(),
           '/select': (context) => const SelectPage(),
-          '/main': (context) => const MainPage(), 
+          '/main': (context) => const MainPage(),
         },
-         theme: ThemeData(
-        colorScheme: ColorScheme.fromSwatch(
-          primarySwatch: Colors.cyan,
-          cardColor: Colors.grey.shade900,
-          accentColor: Colors.cyanAccent,
-          errorColor: Colors.red,
-          brightness: Brightness.dark,
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSwatch(
+            primarySwatch: Colors.cyan,
+            cardColor: Colors.grey.shade900,
+            accentColor: Colors.cyanAccent,
+            errorColor: Colors.red,
+            brightness: Brightness.dark,
+          ),
+          textTheme: TextTheme(
+            bodyLarge: TextStyle(color: Colors.grey.shade200),
+            bodyMedium: TextStyle(color: Colors.grey.shade200),
+            bodySmall: TextStyle(color: Colors.grey.shade200),
+          ),
+          appBarTheme: AppBarTheme(
+            titleTextStyle: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Colors.grey.shade200,
+            ),
+          ),
+          useMaterial3: true,
         ),
-        textTheme: TextTheme(
-          bodyLarge: TextStyle(color: Colors.grey.shade200),
-          bodyMedium: TextStyle(color: Colors.grey.shade200),
-          bodySmall: TextStyle(color: Colors.grey.shade200),
-        ),
-        appBarTheme: AppBarTheme(
-          titleTextStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.grey.shade200),
-        ),
-        useMaterial3: true,
-      ),
       ),
     );
   }
