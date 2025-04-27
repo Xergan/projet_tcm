@@ -86,9 +86,9 @@ class MqttService {
         debugPrint('Message reçu sur topic: $topic');
         debugPrint('Contenu du message: $payload');
         
-        if (topic == 'test/topic') {
+        if (topic == 'alert/topic') {
           NotifService().showNotification(
-            title: 'Topic de Test',
+            title: '🚨 Attention requise',
             body: payload,
           );
         }

@@ -16,22 +16,21 @@ import 'package:projet_tcm/services/sensor_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  NotifService().initNotification();
+  await dotenv.load();
 
+  NotifService().initNotification();
   final mqttService = MqttService();
 
   // Initialisation et connexion MQTT
   await mqttService.initialize();
   bool connected = await mqttService.connect(
-    username: "xergan",
-    password: "1234",
+    username: dotenv.env['MQTT_USERNAME']!,
+    password: dotenv.env['MQTT_PASSWORD']!,
   );
   if (connected) {
-    mqttService.subscribe('test/topic');
+    mqttService.subscribe('alert/topic');
     mqttService.listenToUpdates();
   }
-
-  await dotenv.load();
 
   runApp(const MainApp());
 }

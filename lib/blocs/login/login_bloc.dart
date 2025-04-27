@@ -14,12 +14,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       emit(LoginLoading()); // État de chargement
 
       try {
-        final statusCode = await authService.login(event.username, event.password);
+        final response = await authService.login(event.username, event.password);
 
-        if (statusCode == 200) {
+        if (response["statusCode"] == 200) {
           emit(LoginSuccess()); // État de succès
         } else {
-          emit(LoginFailure('Erreur lors de la connexion : $statusCode')); // État d'échec
+          emit(LoginFailure(response['message'].toString())); // État d'échec
         }
       } catch (e) {
         emit(LoginFailure('Erreur réseau : $e')); // État d'échec avec message d'erreur
