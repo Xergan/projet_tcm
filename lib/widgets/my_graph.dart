@@ -20,14 +20,13 @@ class MyGraph extends StatelessWidget {
         } else if (state is SensorFillingError) {
           return Center(child: Text('Erreur : ${state.errorMessage}'));
         } else if (state is SensorFillingLoaded) {
-          final spots =
-              state.fillings.map((item) {
-                  final date = DateTime.parse(item['Datetime']);
-                  final index = (date.hour * 2) + (date.minute >= 30 ? 1 : 0);
-                  final remplissage = item['Remplissage']?.toDouble() ?? 0.0;
-                  return FlSpot(index.toDouble(), remplissage);
-                }).toList()
-                ..sort((a, b) => a.x.compareTo(b.x));
+      final spots = state.fillings.map((item) {
+          final date = DateTime.parse(item['Datetime']);
+          final exactMinutes = date.hour * 60.0 + date.minute;
+          final remplissage = item['Remplissage']?.toDouble() ?? 0.0;
+          return FlSpot(exactMinutes, remplissage);
+      }).toList()
+        ..sort((a, b) => a.x.compareTo(b.x));
 
           if (spots.isEmpty) {
             return const Center(
@@ -37,16 +36,30 @@ class MyGraph extends StatelessWidget {
               ),
             );
           }
-
-          final existingIndices = spots.map((e) => e.x.toInt()).toSet();
+          
+          // Déterminer les indices min et max pour les données
+          final minIndex = spots.first.x.toInt();
+          final maxIndex = spots.last.x.toInt();
+          
+          // Calculer 5 indices répartis équitablement pour les labels
+          final List<int> labelIndices = [];
+          if (maxIndex > minIndex) {
+            final step = (maxIndex - minIndex) / 4;
+            for (int i = 0; i < 5; i++) {
+              labelIndices.add((minIndex + (step * i)).round());
+            }
+          } else {
+            // Fallback si une seule valeur
+            labelIndices.add(minIndex);
+          }
 
           return LineChart(
             LineChartData(
               minY: 0,
               maxY: 100,
-              minX: 0,
-              maxX: spots.length > 1 ? spots.length - 1 : 1,
-              clipData: FlClipData.all() ,
+              minX: minIndex.toDouble(),
+              maxX: maxIndex.toDouble(),
+              clipData: FlClipData.all(),
               lineBarsData: [
                 LineChartBarData(
                   spots: spots,
@@ -77,15 +90,18 @@ class MyGraph extends StatelessWidget {
                     interval: 1,
                     getTitlesWidget: (value, meta) {
                       final index = value.toInt();
-                      if (index % 6 != 0 || !existingIndices.contains(index)) {
-                        return const SizedBox.shrink();
+                      if (labelIndices.contains(index)) {
+                        final hours = (index ~/ 60).toString().padLeft(2, '0');
+                        final minutes = (index % 60).toString().padLeft(2, '0');
+                        final timeLabel = '$hours:$minutes';
+                        
+                        return Padding(
+                          padding: const EdgeInsets.only(top: 4.0),
+                          child: Text(timeLabel, style: TextStyle(fontSize: 10)),
+                        );
                       }
-
-                      final hour = (index ~/ 2);
-                      return Padding(
-                        padding: const EdgeInsets.only(top: 4.0),
-                        child: Text('${hour}h', style: TextStyle(fontSize: 10)),
-                      );
+                      
+                      return const SizedBox.shrink();
                     },
                     reservedSize: 30,
                   ),

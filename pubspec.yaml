@@ -18,6 +18,8 @@ dependencies:
   intl: ^0.20.2
   meta: ^1.16.0
   mqtt_client: ^10.8.0
+  shared_preferences: ^2.5.3
+  workmanager: ^0.6.0
 
 dev_dependencies:
   flutter_test:

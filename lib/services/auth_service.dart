@@ -11,7 +11,7 @@ class AuthService {
       url,
       headers: {
         'Content-Type': 'application/json',
-        'x-api-key': dotenv.env['API_KEY']!,
+        'x-api-key': dotenv.env['API_KEY']??"",
       },
       body: jsonEncode({'username': username, 'password': password}),
     );
