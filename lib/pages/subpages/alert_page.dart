@@ -10,8 +10,8 @@ class AlertPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Center(child: Card(elevation: 5.0, child: MyTable(idCapteur: selectedSensor['Id_capteur']))),
+        padding: const EdgeInsets.all(8),
+        child: Center(child: Card(elevation: 8.0, child: MyTable(idCapteur: selectedSensor['Id_capteur']))),
       ),
     );
   }

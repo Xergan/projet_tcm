@@ -54,9 +54,8 @@ class MainApp extends StatelessWidget {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        initialRoute: '/demo',
+        initialRoute: '/login',
         routes: {
-          '/demo': (context) => const Demo(),
           '/login': (context) => const LoginPage(),
           '/select': (context) => const SelectPage(),
           '/main': (context) => const MainPage(),

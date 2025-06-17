@@ -66,7 +66,7 @@ class SensorService {
       }
 
       final url = Uri.parse(
-        '$baseUrl/capteurs/alertes?id_capteur=$idCapteur',
+        '$baseUrl/alertes?id_capteur=$idCapteur',
       );
       final response = await http.get(
         url,

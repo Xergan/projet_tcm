@@ -75,7 +75,7 @@ class _MyTableState extends State<MyTable> {
               ),
             ),
             columns: [
-              const DataColumn2(label: Text('Alerte'), size: ColumnSize.L),
+              const DataColumn2(label: Text('Alerte'), size: ColumnSize.M),
               DataColumn2(
                 label: Text('Date'),
                 size: ColumnSize.M,
@@ -88,7 +88,7 @@ class _MyTableState extends State<MyTable> {
                 },
               ),
               DataColumn2(
-                label: Text('Statut'),
+                label: Text('Active'),
                 size: ColumnSize.S,
                 onSort: (columnIndex, ascending) {
                   _sort<num>((row) => row['Active'], columnIndex, ascending);
@@ -130,15 +130,15 @@ class MyDataTableSource extends DataTableSource {
     final row = _sortedRows[index];
     return DataRow(
       cells: [
-        DataCell(Text(row['Type'] ?? 'Inconnue')),
+        DataCell(Text(row['Type'])),
         DataCell(
           Text(
             DateFormat(
-              'dd/MM/yyyy',
+              'dd/MM/yy',
             ).format(DateTime.parse((row['Date_alerte']))),
           ),
         ),
-        DataCell(Text(row['Active'] == 1 ? "⛔️" : "✅")),
+        DataCell(Text(row['Active'] == 1 ? "✅" : "⛔️")),
       ],
     );
   }

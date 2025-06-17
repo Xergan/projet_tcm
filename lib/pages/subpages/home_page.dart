@@ -38,6 +38,11 @@ class HomePage extends StatelessWidget {
                 'Type : ${selectedSensor['Type']}',
                 style: const TextStyle(fontSize: 16),
               ),
+              const SizedBox(height: 10),
+              Text(
+                'Hauteur : ${selectedSensor['Hauteur']} m',
+                style: const TextStyle(fontSize: 16),
+              ),
             ],
           ),
         ),
