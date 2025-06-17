@@ -13,6 +13,7 @@ import 'package:projet_tcm/services/auth_service.dart';
 import 'package:projet_tcm/services/mqtt_service.dart';
 import 'package:projet_tcm/services/notif_service.dart';
 import 'package:projet_tcm/services/sensor_service.dart';
+import 'package:projet_tcm/demo.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -53,8 +54,9 @@ class MainApp extends StatelessWidget {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        initialRoute: '/login',
+        initialRoute: '/demo',
         routes: {
+          '/demo': (context) => const Demo(),
           '/login': (context) => const LoginPage(),
           '/select': (context) => const SelectPage(),
           '/main': (context) => const MainPage(),
